@@ -11,8 +11,8 @@ namespace Tecsafe\OFCP\Events;
 final class DeleteCustomerPayload implements \JsonSerializable
 {
   public function __construct(
-    private ?string $customer,
-    private ?string $salesChannel,
+    private string $customer,
+    private string $salesChannel,
   ) {}
 
   public function getCustomer(): string { return $this->customer; }

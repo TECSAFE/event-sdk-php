@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tecsafe\OFCP\Events\Models;
 
-use Tecsafe\OFCP\Events\Models\TestType;
-
 /**
  * Payload for merging customers
  */
@@ -17,14 +15,12 @@ final class MergeCustomerPayload implements \JsonSerializable
      * @param string $newCustomerId The new customer ID
      * @param string $oldCustomerId The old customer ID
      * @param string $salesChannel The sales channel ID
-     * @param TestType $test
      * @return self
      */
     public function __construct(
         private string $newCustomerId,
         private string $oldCustomerId,
         private string $salesChannel,
-        private TestType $test,
     ) {
     }
 
@@ -41,7 +37,6 @@ final class MergeCustomerPayload implements \JsonSerializable
             $data['newCustomerId'] ?? null,
             $data['oldCustomerId'] ?? null,
             $data['salesChannel'] ?? null,
-            isset($data['test']) ? TestType::from_json($data['test']) : null,
         );
     }
 
@@ -72,22 +67,12 @@ final class MergeCustomerPayload implements \JsonSerializable
         $this->salesChannel = $salesChannel;
     }
 
-    public function getTest(): TestType
-    {
-        return $this->test;
-    }
-    public function setTest(TestType $test): void
-    {
-        $this->test = $test;
-    }
-
     public function jsonSerialize(): array
     {
         return [
           'newCustomerId' => $this->newCustomerId,
           'oldCustomerId' => $this->oldCustomerId,
           'salesChannel' => $this->salesChannel,
-          'test' => $this->test,
         ];
     }
 }

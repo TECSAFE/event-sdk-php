@@ -7,7 +7,7 @@ namespace Tecsafe\OFCP\Events\Models;
 /**
  * Payload for deleting customers
  */
-final class DeleteCustomerPayload implements \JsonSerializable
+final class BasicCustomerEventPayload implements \JsonSerializable
 {
     /**
      * Payload for deleting customers

@@ -13,14 +13,20 @@ final class MergeCustomerPayload implements \JsonSerializable
      * Payload for merging customers
      *
      * @param string $newCustomerId The new customer ID
+     * @param string $newExternalCustomerId The new customer ID
+     * @param string $newSalesChannelId The new sales channel ID
      * @param string $oldCustomerId The old customer ID
-     * @param string $salesChannel The sales channel ID
+     * @param string $oldExternalCustomerId The old external customer ID
+     * @param string $oldSalesChannelId The old sales channel ID
      * @return self
      */
     public function __construct(
         private string $newCustomerId,
+        private string $newExternalCustomerId,
+        private string $newSalesChannelId,
         private string $oldCustomerId,
-        private string $salesChannel,
+        private string $oldExternalCustomerId,
+        private string $oldSalesChannelId,
     ) {
     }
 
@@ -35,8 +41,11 @@ final class MergeCustomerPayload implements \JsonSerializable
         $data = is_string($json) ? json_decode($json, true) : $json;
         return new self(
             $data['newCustomerId'] ?? null,
+            $data['newExternalCustomerId'] ?? null,
+            $data['newSalesChannelId'] ?? null,
             $data['oldCustomerId'] ?? null,
-            $data['salesChannel'] ?? null,
+            $data['oldExternalCustomerId'] ?? null,
+            $data['oldSalesChannelId'] ?? null,
         );
     }
 
@@ -49,6 +58,24 @@ final class MergeCustomerPayload implements \JsonSerializable
         $this->newCustomerId = $newCustomerId;
     }
 
+    public function getNewExternalCustomerId(): string
+    {
+        return $this->newExternalCustomerId;
+    }
+    public function setNewExternalCustomerId(string $newExternalCustomerId): void
+    {
+        $this->newExternalCustomerId = $newExternalCustomerId;
+    }
+
+    public function getNewSalesChannelId(): string
+    {
+        return $this->newSalesChannelId;
+    }
+    public function setNewSalesChannelId(string $newSalesChannelId): void
+    {
+        $this->newSalesChannelId = $newSalesChannelId;
+    }
+
     public function getOldCustomerId(): string
     {
         return $this->oldCustomerId;
@@ -58,21 +85,33 @@ final class MergeCustomerPayload implements \JsonSerializable
         $this->oldCustomerId = $oldCustomerId;
     }
 
-    public function getSalesChannel(): string
+    public function getOldExternalCustomerId(): string
     {
-        return $this->salesChannel;
+        return $this->oldExternalCustomerId;
     }
-    public function setSalesChannel(string $salesChannel): void
+    public function setOldExternalCustomerId(string $oldExternalCustomerId): void
     {
-        $this->salesChannel = $salesChannel;
+        $this->oldExternalCustomerId = $oldExternalCustomerId;
+    }
+
+    public function getOldSalesChannelId(): string
+    {
+        return $this->oldSalesChannelId;
+    }
+    public function setOldSalesChannelId(string $oldSalesChannelId): void
+    {
+        $this->oldSalesChannelId = $oldSalesChannelId;
     }
 
     public function jsonSerialize(): array
     {
         return [
           'newCustomerId' => $this->newCustomerId,
+          'newExternalCustomerId' => $this->newExternalCustomerId,
+          'newSalesChannelId' => $this->newSalesChannelId,
           'oldCustomerId' => $this->oldCustomerId,
-          'salesChannel' => $this->salesChannel,
+          'oldExternalCustomerId' => $this->oldExternalCustomerId,
+          'oldSalesChannelId' => $this->oldSalesChannelId,
         ];
     }
 }

@@ -7,9 +7,11 @@ namespace Tecsafe\OFCP\Events;
 use Tecsafe\OFCP\Events\Models\MergeCustomerPayload;
 use Tecsafe\OFCP\Events\Models\BasicCustomerEventPayload;
 use Tecsafe\OFCP\Events\Models\GenericEmailEventPayload;
+use Tecsafe\OFCP\Events\Models\ButtonEmailEventPayload;
 use Tecsafe\OFCP\Events\Listeners\MergeCustomerPayloadListener;
 use Tecsafe\OFCP\Events\Listeners\BasicCustomerEventPayloadListener;
 use Tecsafe\OFCP\Events\Listeners\GenericEmailEventPayloadListener;
+use Tecsafe\OFCP\Events\Listeners\ButtonEmailEventPayloadListener;
 use Tecsafe\OFCP\Events\MqServiceBase;
 
 class MqService extends MqServiceBase
@@ -132,6 +134,36 @@ class MqService extends MqServiceBase
             return $res;
         };
         $this->subscribe("email.generic", $handler);
+    }
+
+    /**
+     * Send the email.button event.
+     * @param ButtonEmailEventPayload $payload The payload to send.
+     * @return void
+     * @throws \Exception If the message could not be sent.
+     */
+    public function send_email_button(ButtonEmailEventPayload $payload): void
+    {
+        $this->publish("email.button", json_encode($payload));
+    }
+
+    /**
+     * Subscribe to the email.button event.
+     * @param callable|ButtonEmailEventPayloadListener $callback The callback or listener instance to call when the event is received.
+     */
+    public function subscribe_email_button(callable|ButtonEmailEventPayloadListener $callback): void
+    {
+        $handler = function (string $payload) use ($callback) {
+            $obj = ButtonEmailEventPayload::from_json($payload);
+            $res = false;
+            if ($callback instanceof ButtonEmailEventPayloadListener) {
+                $res = $callback->on_event($obj);
+            } else {
+                $res = $callback($obj);
+            }
+            return $res;
+        };
+        $this->subscribe("email.button", $handler);
     }
 
 }

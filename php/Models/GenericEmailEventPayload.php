@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace Tecsafe\OFCP\Events\Models;
 
+use Tecsafe\OFCP\Events\Models\Body;
+use Tecsafe\OFCP\Events\Models\Header;
+
 /**
- * Payload for deleting customers
+ * Payload for sending generic emails
  */
 final class GenericEmailEventPayload implements \JsonSerializable
 {
     /**
-     * Payload for deleting customers
+     * Payload for sending generic emails
      *
-     * @param string $email The receiving email address
-     * @param string $subject The email subject ID
-     * @param string $text The email text, only normal text and links are supported, and should not contain HTML
+     * @param Body $body Email body attributs text: Email text that will be added in the template {{ text }} without html tags Links are parsed to anchor tags title: Email title that will be added in the template {{ title }} not the subject
+     * @param Header $header Email header attreibutes to, from, cc, bcc, subject, are Required and are self explaining replyTo: Optional the recipient of the reply returnPath : Optional return path address of the email
      * @return self
      */
     public function __construct(
-        private string $email,
-        private string $subject,
-        private string $text,
+        private Body $body,
+        private Header $header,
     ) {
     }
 
@@ -34,45 +35,34 @@ final class GenericEmailEventPayload implements \JsonSerializable
     {
         $data = is_string($json) ? json_decode($json, true) : $json;
         return new self(
-            $data['email'] ?? null,
-            $data['subject'] ?? null,
-            $data['text'] ?? null,
+            isset($data['body']) ? Body::from_json($data['body']) : null,
+            isset($data['header']) ? Header::from_json($data['header']) : null,
         );
     }
 
-    public function getEmail(): string
+    public function getBody(): Body
     {
-        return $this->email;
+        return $this->body;
     }
-    public function setEmail(string $email): void
+    public function setBody(Body $body): void
     {
-        $this->email = $email;
-    }
-
-    public function getSubject(): string
-    {
-        return $this->subject;
-    }
-    public function setSubject(string $subject): void
-    {
-        $this->subject = $subject;
+        $this->body = $body;
     }
 
-    public function getText(): string
+    public function getHeader(): Header
     {
-        return $this->text;
+        return $this->header;
     }
-    public function setText(string $text): void
+    public function setHeader(Header $header): void
     {
-        $this->text = $text;
+        $this->header = $header;
     }
 
     public function jsonSerialize(): array
     {
         return [
-          'email' => $this->email,
-          'subject' => $this->subject,
-          'text' => $this->text,
+          'body' => $this->body,
+          'header' => $this->header,
         ];
     }
 }

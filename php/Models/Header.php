@@ -12,7 +12,7 @@ final class Header implements \JsonSerializable
     /**
      * Email header attreibutes to, from, cc, bcc, subject, are Required and are self explaining replyTo: Optional the recipient of the reply returnPath : Optional return path address of the email
      *
-     * @param array $reservedFrom
+     * @param string $reservedFrom
      * @param string $subject
      * @param array $to
      * @param array $bcc
@@ -22,7 +22,7 @@ final class Header implements \JsonSerializable
      * @return self
      */
     public function __construct(
-        private array $reservedFrom,
+        private string $reservedFrom,
         private string $subject,
         private array $to,
         private ?array $bcc,
@@ -70,11 +70,11 @@ final class Header implements \JsonSerializable
         $this->cc = $cc;
     }
 
-    public function getReservedFrom(): array
+    public function getReservedFrom(): string
     {
         return $this->reservedFrom;
     }
-    public function setReservedFrom(array $reservedFrom): void
+    public function setReservedFrom(string $reservedFrom): void
     {
         $this->reservedFrom = $reservedFrom;
     }

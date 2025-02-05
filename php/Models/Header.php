@@ -1,17 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Tecsafe\OFCP\Events\Models;
 
 /**
  * Email header attreibutes to, from, cc, bcc, subject, are Required and are self explaining replyTo: Optional the recipient of the reply returnPath : Optional return path address of the email
  */
-final class Header implements \JsonSerializable
+final class Header implements \Tecsafe\OFCP\Events\OfcpEvent
 {
     /**
      * Email header attreibutes to, from, cc, bcc, subject, are Required and are self explaining replyTo: Optional the recipient of the reply returnPath : Optional return path address of the email
-     *
+     * 
      * @param string $reservedFrom
      * @param string $subject
      * @param array $to
@@ -21,37 +20,20 @@ final class Header implements \JsonSerializable
      * @param string $returnPath
      * @return self
      */
-    public function __construct(
-        private string $reservedFrom,
-        private string $subject,
-        private array $to,
-        private ?array $bcc,
-        private ?array $cc,
-        private ?string $replyTo,
-        private ?string $returnPath,
-    ) {
+    public function __construct(private string $reservedFrom, private string $subject, private array $to, private ?array $bcc, private ?array $cc, private ?string $replyTo, private ?string $returnPath)
+    {
     }
-
     /**
      * Parse JSON data into an instance of this class.
-     *
+     * 
      * @param string|array $json JSON data to parse.
      * @return self
      */
     public static function from_json(string|array $json): self
     {
-        $data = is_string($json) ? json_decode($json, true) : $json;
-        return new self(
-            $data['reservedFrom'] ?? null,
-            $data['subject'] ?? null,
-            $data['to'] ?? null,
-            $data['bcc'] ?? null,
-            $data['cc'] ?? null,
-            $data['replyTo'] ?? null,
-            $data['returnPath'] ?? null,
-        );
+        $data = \is_string($json) ? json_decode($json, true) : $json;
+        return new self($data['reservedFrom'] ?? null, $data['subject'] ?? null, $data['to'] ?? null, $data['bcc'] ?? null, $data['cc'] ?? null, $data['replyTo'] ?? null, $data['returnPath'] ?? null);
     }
-
     public function getBcc(): ?array
     {
         return $this->bcc;
@@ -60,7 +42,6 @@ final class Header implements \JsonSerializable
     {
         $this->bcc = $bcc;
     }
-
     public function getCc(): ?array
     {
         return $this->cc;
@@ -69,7 +50,6 @@ final class Header implements \JsonSerializable
     {
         $this->cc = $cc;
     }
-
     public function getReservedFrom(): string
     {
         return $this->reservedFrom;
@@ -78,7 +58,6 @@ final class Header implements \JsonSerializable
     {
         $this->reservedFrom = $reservedFrom;
     }
-
     public function getReplyTo(): ?string
     {
         return $this->replyTo;
@@ -87,7 +66,6 @@ final class Header implements \JsonSerializable
     {
         $this->replyTo = $replyTo;
     }
-
     public function getReturnPath(): ?string
     {
         return $this->returnPath;
@@ -96,7 +74,6 @@ final class Header implements \JsonSerializable
     {
         $this->returnPath = $returnPath;
     }
-
     public function getSubject(): string
     {
         return $this->subject;
@@ -105,7 +82,6 @@ final class Header implements \JsonSerializable
     {
         $this->subject = $subject;
     }
-
     public function getTo(): array
     {
         return $this->to;
@@ -114,17 +90,8 @@ final class Header implements \JsonSerializable
     {
         $this->to = $to;
     }
-
     public function jsonSerialize(): array
     {
-        return [
-          'bcc' => $this->bcc,
-          'cc' => $this->cc,
-          'from' => $this->reservedFrom,
-          'replyTo' => $this->replyTo,
-          'returnPath' => $this->returnPath,
-          'subject' => $this->subject,
-          'to' => $this->to,
-        ];
+        return ['bcc' => $this->bcc, 'cc' => $this->cc, 'from' => $this->reservedFrom, 'replyTo' => $this->replyTo, 'returnPath' => $this->returnPath, 'subject' => $this->subject, 'to' => $this->to];
     }
 }

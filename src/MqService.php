@@ -8,13 +8,13 @@ use Tecsafe\OFCP\Events\Models\CustomerDeleteEventPayload;
 use Tecsafe\OFCP\Events\Models\CustomerCreatedEventPayload;
 use Tecsafe\OFCP\Events\Models\GenericEmailEventPayload;
 use Tecsafe\OFCP\Events\Models\ButtonEmailEventPayload;
-use Tecsafe\OFCP\Events\Models\AuthentikAddUserPayload;
+use Tecsafe\OFCP\Events\Models\CockpitAddRegistrationPayload;
 use Tecsafe\OFCP\Events\Listeners\MergeCustomerPayloadListener;
 use Tecsafe\OFCP\Events\Listeners\CustomerDeleteEventPayloadListener;
 use Tecsafe\OFCP\Events\Listeners\CustomerCreatedEventPayloadListener;
 use Tecsafe\OFCP\Events\Listeners\GenericEmailEventPayloadListener;
 use Tecsafe\OFCP\Events\Listeners\ButtonEmailEventPayloadListener;
-use Tecsafe\OFCP\Events\Listeners\AuthentikAddUserPayloadListener;
+use Tecsafe\OFCP\Events\Listeners\CockpitAddRegistrationPayloadListener;
 use Tecsafe\OFCP\Events\MqServiceBase;
 
 class MqService extends MqServiceBase
@@ -171,33 +171,33 @@ class MqService extends MqServiceBase
   }
 
   /**
-   * Send the authentik.add_user event.
-   * @param AuthentikAddUserPayload $payload The payload to send.
+   * Send the cockpit.addRegistration event.
+   * @param CockpitAddRegistrationPayload $payload The payload to send.
    * @return void
    * @throws \Exception If the message could not be sent.
    */
-  public function send_authentik_add_user(AuthentikAddUserPayload $payload): void
+  public function send_cockpit_addRegistration(CockpitAddRegistrationPayload $payload): void
   {
-    $this->publish("authentik.add_user", json_encode($payload));
+    $this->publish("cockpit.addRegistration", json_encode($payload));
   }
 
   /**
-   * Subscribe to the authentik.add_user event.
-   * @param callable|AuthentikAddUserPayloadListener $callback The callback or listener instance to call when the event is received.
+   * Subscribe to the cockpit.addRegistration event.
+   * @param callable|CockpitAddRegistrationPayloadListener $callback The callback or listener instance to call when the event is received.
    */
-  public function subscribe_authentik_add_user(callable|AuthentikAddUserPayloadListener $callback): void
+  public function subscribe_cockpit_addRegistration(callable|CockpitAddRegistrationPayloadListener $callback): void
   {
     $handler = function (string $payload) use ($callback) {
-      $obj = AuthentikAddUserPayload::from_json($payload);
+      $obj = CockpitAddRegistrationPayload::from_json($payload);
       $res = false;
-      if ($callback instanceof AuthentikAddUserPayloadListener) {
+      if ($callback instanceof CockpitAddRegistrationPayloadListener) {
         $res = $callback->on_event($obj);
       } else {
         $res = $callback($obj);
       }
       return $res;
     };
-    $this->subscribe("authentik.add_user", $handler);
+    $this->subscribe("cockpit.addRegistration", $handler);
   }
 
 }

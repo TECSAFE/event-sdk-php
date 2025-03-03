@@ -5,18 +5,20 @@ namespace Tecsafe\OFCP\Events\Models;
 
 use Tecsafe\OFCP\Events\Models\User;
 /**
- * Payload for add an user to Authentik
+ * Payload for add an user to the Cockpit
  */
-final class AuthentikAddUserPayload implements \Tecsafe\OFCP\Events\OfcpEvent
+final class CockpitAddRegistrationPayload implements \Tecsafe\OFCP\Events\OfcpEvent
 {
     /**
-     * Payload for add an user to Authentik
+     * Payload for add an user to the Cockpit
      * 
+     * @param mixed $expirationDate
      * @param string $password
+     * @param string $role
      * @param User $user user data attributes username, name, email, are Required and are self explaining type: is Required and Define the type of the user [internal┃external┃service_account┃internal_service_account] groups : Optional, array of uuids of the groups the user is in
      * @return self
      */
-    public function __construct(private string $password, private User $user)
+    public function __construct(private mixed|null $expirationDate, private string $password, private string $role, private User $user)
     {
     }
     /**
@@ -28,7 +30,15 @@ final class AuthentikAddUserPayload implements \Tecsafe\OFCP\Events\OfcpEvent
     public static function from_json(string|array $json): self
     {
         $data = \is_string($json) ? json_decode($json, true) : $json;
-        return new self($data['password'] ?? null, isset($data['user']) ? User::from_json($data['user']) : null);
+        return new self($data['expirationDate'] ?? null, $data['password'] ?? null, $data['role'] ?? null, isset($data['user']) ? User::from_json($data['user']) : null);
+    }
+    public function getExpirationDate(): mixed
+    {
+        return $this->expirationDate;
+    }
+    public function setExpirationDate(mixed $expirationDate): void
+    {
+        $this->expirationDate = $expirationDate;
     }
     public function getPassword(): string
     {
@@ -37,6 +47,14 @@ final class AuthentikAddUserPayload implements \Tecsafe\OFCP\Events\OfcpEvent
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+    public function setRole(string $role): void
+    {
+        $this->role = $role;
     }
     public function getUser(): User
     {
@@ -48,6 +66,6 @@ final class AuthentikAddUserPayload implements \Tecsafe\OFCP\Events\OfcpEvent
     }
     public function jsonSerialize(): array
     {
-        return ['password' => $this->password, 'user' => $this->user];
+        return ['expiration_date' => $this->expirationDate, 'password' => $this->password, 'role' => $this->role, 'user' => $this->user];
     }
 }

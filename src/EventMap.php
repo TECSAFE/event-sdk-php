@@ -29,8 +29,8 @@ final class EventMap
     const CUSTOMER_CREATED = ['name' => 'customer.created', 'type' => 'CustomerCreatedEventPayload'];
     const EMAIL_GENERIC = ['name' => 'email.generic', 'type' => 'GenericEmailEventPayload'];
     const EMAIL_BUTTON = ['name' => 'email.button', 'type' => 'ButtonEmailEventPayload'];
-    const AUTHENTIK_ADD_USER = ['name' => 'authentik.add_user', 'type' => 'AuthentikAddUserPayload'];
-    public const EVENTS = [self::CUSTOMER_MERGE, self::CUSTOMER_DELETE, self::CUSTOMER_CREATED, self::EMAIL_GENERIC, self::EMAIL_BUTTON, self::AUTHENTIK_ADD_USER];
+    const COCKPIT_ADDREGISTRATION = ['name' => 'cockpit.addRegistration', 'type' => 'CockpitAddRegistrationPayload'];
+    public const EVENTS = [self::CUSTOMER_MERGE, self::CUSTOMER_DELETE, self::CUSTOMER_CREATED, self::EMAIL_GENERIC, self::EMAIL_BUTTON, self::COCKPIT_ADDREGISTRATION];
     public static function getTypeName(string $eventName, bool $fqdn = true): string
     {
         $typeName = null;

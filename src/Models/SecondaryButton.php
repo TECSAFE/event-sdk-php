@@ -3,13 +3,16 @@
 declare (strict_types=1);
 namespace Tecsafe\OFCP\Events\Models;
 
-final class BodyDataSecondaryButton implements \Tecsafe\OFCP\Events\OfcpEvent
+/**
+ * The secondary button
+ */
+final class SecondaryButton implements \Tecsafe\OFCP\Events\OfcpEvent
 {
     /**
-     * This class represents the undefined model.
+     * The secondary button
      * 
-     * @param string $title
-     * @param string $url
+     * @param string $title The title of the button
+     * @param string $url The URL the button should link to
      * @return self
      */
     public function __construct(private string $title, private string $url)

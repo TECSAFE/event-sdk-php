@@ -13,12 +13,13 @@ final class CockpitAddRegistrationPayload implements \Tecsafe\OFCP\Events\OfcpEv
      * Payload for add an user to the Cockpit
      * 
      * @param mixed $expirationDate
+     * @param string $organisationId
      * @param string $password
      * @param string $role
      * @param User $user user data attributes username, name, email, are Required and are self explaining type: is Required and Define the type of the user [internal┃external┃service_account┃internal_service_account] groups : Optional, array of uuids of the groups the user is in
      * @return self
      */
-    public function __construct(private mixed|null $expirationDate, private string $password, private string $role, private User $user)
+    public function __construct(private mixed|null $expirationDate, private string $organisationId, private string $password, private string $role, private User $user)
     {
     }
     /**
@@ -30,7 +31,7 @@ final class CockpitAddRegistrationPayload implements \Tecsafe\OFCP\Events\OfcpEv
     public static function from_json(string|array $json): self
     {
         $data = \is_string($json) ? json_decode($json, true) : $json;
-        return new self($data['expirationDate'] ?? null, $data['password'] ?? null, $data['role'] ?? null, isset($data['user']) ? User::from_json($data['user']) : null);
+        return new self($data['expirationDate'] ?? null, $data['organisationId'] ?? null, $data['password'] ?? null, $data['role'] ?? null, isset($data['user']) ? User::from_json($data['user']) : null);
     }
     public function getExpirationDate(): mixed
     {
@@ -39,6 +40,14 @@ final class CockpitAddRegistrationPayload implements \Tecsafe\OFCP\Events\OfcpEv
     public function setExpirationDate(mixed $expirationDate): void
     {
         $this->expirationDate = $expirationDate;
+    }
+    public function getOrganisationId(): string
+    {
+        return $this->organisationId;
+    }
+    public function setOrganisationId(string $organisationId): void
+    {
+        $this->organisationId = $organisationId;
     }
     public function getPassword(): string
     {
@@ -66,6 +75,6 @@ final class CockpitAddRegistrationPayload implements \Tecsafe\OFCP\Events\OfcpEv
     }
     public function jsonSerialize(): array
     {
-        return ['expiration_date' => $this->expirationDate, 'password' => $this->password, 'role' => $this->role, 'user' => $this->user];
+        return ['expiration_date' => $this->expirationDate, 'organisationId' => $this->organisationId, 'password' => $this->password, 'role' => $this->role, 'user' => $this->user];
     }
 }
